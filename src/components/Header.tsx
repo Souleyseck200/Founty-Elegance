@@ -1,11 +1,12 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useStore } from "@/lib/store";
+import { OFFICIAL_CATALOGS } from "@/lib/officialCatalogs";
 import { Sparkles, ShoppingBag, User, Menu, X, ChevronDown } from "lucide-react";
 import logoFounty from "@/assets/logo-founty.png";
 
 export function Header() {
-  const { cartCount, setCartOpen, openOrder, currency, setCurrency, categories } = useStore();
+  const { cartCount, setCartOpen, openOrder, currency, setCurrency } = useStore();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [collectionsOpen, setCollectionsOpen] = useState(false);
@@ -73,12 +74,20 @@ export function Header() {
               </Link>
               {collectionsOpen && (
                 <div className="fade-in absolute left-1/2 top-full -translate-x-1/2 pt-3">
-                  <div className="min-w-[220px] border border-border bg-background py-3 shadow-[var(--shadow-editorial)]">
-                    {categories.map((c) => (
+                  <div className="min-w-[260px] border border-border bg-background py-3 shadow-[var(--shadow-editorial)]">
+                    <Link
+                      to="/collections"
+                      className="block px-5 py-2 font-serif text-base text-foreground transition-colors hover:bg-surface"
+                    >
+                      Toute la collection
+                    </Link>
+                    <div className="mx-3 my-2 border-t border-border" />
+                    <p className="px-5 pb-1 pt-1 ui-label text-muted-foreground">Catalogues officiels</p>
+                    {OFFICIAL_CATALOGS.map((c) => (
                       <Link
-                        key={c.id}
+                        key={c.label}
                         to="/collections"
-                        search={{ category: c.id } as never}
+                        search={{ category: c.label }}
                         className="block px-5 py-2 font-serif text-base text-foreground transition-colors hover:bg-surface"
                       >
                         {c.label}
@@ -162,11 +171,15 @@ export function Header() {
             </Link>
             <div className="border-t border-border py-3">
               <p className="ui-label mb-3 text-muted-foreground">Collections</p>
-              {categories.map((c) => (
+              <Link to="/collections" className="block py-2 font-serif text-lg text-foreground">
+                Toute la collection
+              </Link>
+              <p className="ui-label mb-2 mt-4 text-muted-foreground">Catalogues officiels</p>
+              {OFFICIAL_CATALOGS.map((c) => (
                 <Link
-                  key={c.id}
+                  key={c.label}
                   to="/collections"
-                  search={{ category: c.id } as never}
+                  search={{ category: c.label }}
                   className="block py-2 font-serif text-lg text-foreground"
                 >
                   {c.label}

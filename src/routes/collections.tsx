@@ -1,16 +1,17 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ProductCard } from "@/components/ProductCard";
-import { MATERIALS, type Category, type Material } from "@/lib/products";
+import { MATERIALS, type Material } from "@/lib/products";
+import { OFFICIAL_CATALOGS } from "@/lib/officialCatalogs";
 import { useStore } from "@/lib/store";
 import { convertFromFCFA } from "@/lib/format";
 
 type SpecialCollection = "saga" | "tabaski";
-type Search = { category?: Category };
+type Search = { category?: string };
 
 export const Route = createFileRoute("/collections")({
   validateSearch: (s: Record<string, unknown>): Search => ({
-    category: s.category as Category | undefined,
+    category: typeof s.category === "string" ? s.category : undefined,
   }),
   head: () => ({
     meta: [
@@ -24,13 +25,6 @@ export const Route = createFileRoute("/collections")({
   }),
   component: Collections,
 });
-
-// Map category IDs to official Founty labels
-const OFFICIAL_CATEGORIES: { ids: string[]; label: string }[] = [
-  { ids: ["boubous", "ensembles"], label: "Vêtement traditionnel" },
-  { ids: ["chemises", "pantalons"], label: "Vêtements Européens" },
-  { ids: ["accessoires"], label: "Accessoires" },
-];
 
 const SPECIAL_COLLECTIONS: { id: SpecialCollection; label: string }[] = [
   { id: "saga", label: "Saga de l'élégance" },
@@ -47,8 +41,12 @@ function getProductCollection(productName: string): SpecialCollection | null {
 
 function Collections() {
   const { category } = Route.useSearch();
-  const { currency, products, categories } = useStore();
+  const { currency, products } = useStore();
   const [activeCat, setActiveCat] = useState<string | null>(category ?? null);
+
+  useEffect(() => {
+    setActiveCat(category ?? null);
+  }, [category]);
   const [activeMat, setActiveMat] = useState<Material | null>(null);
   const [activeSpecial, setActiveSpecial] = useState<SpecialCollection | null>(null);
   const [maxPrice, setMaxPrice] = useState<number>(300000);
@@ -58,7 +56,7 @@ function Collections() {
       products.filter((p) => {
         if (activeCat) {
           // Check official category mapping
-          const official = OFFICIAL_CATEGORIES.find(o => o.label === activeCat);
+          const official = OFFICIAL_CATALOGS.find((o) => o.label === activeCat);
           if (official) {
             if (!official.ids.includes(p.category)) return false;
           } else {
