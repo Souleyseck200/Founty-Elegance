@@ -5,6 +5,7 @@ import { Card, PageHeader, StatusBadge, formatDate, formatFCFA } from "@/compone
 import { TrendingUp, Package, Scissors, ArrowUpRight, Sparkles } from "lucide-react";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
+import { resolveCatalogImageUrl } from "@/lib/products";
 
 export const Route = createFileRoute("/admin/")({
   component: DashboardPage,
@@ -38,7 +39,7 @@ function DashboardPage() {
                id: item.products.id,
                name: item.products.name,
                priceFCFA: item.products.price_fcfa,
-               image: item.products.image
+               image: resolveCatalogImageUrl(item.products.image)
              },
              size: item.size,
              qty: item.qty

@@ -1,5 +1,11 @@
 import { createContext, useCallback, useContext, useMemo, useState, useEffect, type ReactNode } from "react";
-import { PRODUCTS as INITIAL_PRODUCTS, CATEGORIES as INITIAL_CATEGORIES, type Product, type Size, type Category as CatType } from "./products";
+import {
+  PRODUCTS as INITIAL_PRODUCTS,
+  CATEGORIES as INITIAL_CATEGORIES,
+  resolveCatalogImageUrl,
+  type Product,
+  type Size,
+} from "./products";
 import { supabase } from "./supabase";
 import type { Currency } from "./format";
 
@@ -57,18 +63,27 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         return;
       }
       if (data && data.length > 0) {
-        const mapped: Product[] = data.map(d => ({
-          id: d.id,
-          name: d.name,
-          category: d.category as any,
-          material: d.material as any,
-          priceFCFA: d.price_fcfa,
-          image: d.image,
-          images: d.images,
-          description: d.description,
-          sizesAvailable: d.sizes_available as any,
-          customEnabled: d.custom_enabled,
-        }));
+        const mapped: Product[] = data.map((d) => {
+          const rawImages = d.images;
+          const images = Array.isArray(rawImages)
+            ? rawImages.map(resolveCatalogImageUrl)
+            : rawImages
+              ? [resolveCatalogImageUrl(rawImages)]
+              : [];
+          const image = resolveCatalogImageUrl(d.image) || images[0] || "";
+          return {
+            id: d.id,
+            name: d.name,
+            category: d.category as any,
+            material: d.material as any,
+            priceFCFA: d.price_fcfa,
+            image,
+            images: images.length ? images : image ? [image] : [],
+            description: d.description,
+            sizesAvailable: d.sizes_available as any,
+            customEnabled: d.custom_enabled,
+          };
+        });
         setProducts(mapped);
       }
     }
@@ -79,7 +94,12 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         return;
       }
       if (data && data.length > 0) {
-        setCategories(data);
+        setCategories(
+          data.map((row) => ({
+            ...row,
+            image: resolveCatalogImageUrl(row.image),
+          })),
+        );
       }
     }
     fetchProducts();

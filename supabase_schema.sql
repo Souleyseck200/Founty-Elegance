@@ -73,6 +73,8 @@ ALTER TABLE public.order_items DISABLE ROW LEVEL SECURITY;
 ALTER TABLE public.custom_requests DISABLE ROW LEVEL SECURITY;
 
 -- SEED DATA
+-- Image paths like /src/assets/*.jpg are dev-only; the app maps basenames to bundled assets in production.
+-- For new content, prefer Supabase Storage public URLs (https://...).
 
 -- Categories
 INSERT INTO public.categories (id, label, image, tagline) VALUES

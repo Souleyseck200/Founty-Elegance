@@ -161,3 +161,29 @@ export const PRODUCTS: Product[] = [
 ];
 
 export const MATERIALS: Material[] = ["Bazin", "Lin", "Wax", "Coton", "Cuir"];
+
+/** Maps seed DB paths like `/src/assets/foo.jpg` to Vite-built URLs (work in production). */
+const BUNDLED_ASSET_BY_FILENAME: Record<string, string> = {
+  "cat-boubous.jpg": catBoubous,
+  "cat-chemises.jpg": catChemises,
+  "cat-pantalons.jpg": catPantalons,
+  "cat-ensembles.jpg": catEnsembles,
+  "cat-accessoires.jpg": catAccessoires,
+  "product-boubou-1.jpg": boubou1,
+  "product-boubou-2.jpg": boubou2,
+  "product-chemise-1.jpg": chemise1,
+  "product-chemise-2.jpg": chemise2,
+  "product-pantalon-1.jpg": pantalon1,
+  "product-ensemble-1.jpg": ensemble1,
+  "product-ensemble-2.jpg": ensemble2,
+  "product-accessoire-1.jpg": accessoire1,
+};
+
+export function resolveCatalogImageUrl(url: string | null | undefined): string {
+  if (url == null) return "";
+  const t = String(url).trim();
+  if (!t) return "";
+  if (/^https?:\/\//i.test(t) || t.startsWith("data:")) return t;
+  const name = t.includes("/") ? (t.split("/").pop() ?? t) : t;
+  return BUNDLED_ASSET_BY_FILENAME[name] ?? t;
+}
