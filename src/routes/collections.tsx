@@ -21,6 +21,7 @@ export const Route = createFileRoute("/collections")({
         content: "Explorez nos boubous, chemises, pantalons, ensembles et accessoires d'exception.",
       },
       { property: "og:title", content: "Collections — Founty Élégance" },
+      { property: "og:url", content: "https://fountyelegance.com/collections" },
     ],
   }),
   component: Collections,

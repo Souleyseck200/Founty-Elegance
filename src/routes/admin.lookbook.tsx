@@ -111,7 +111,7 @@ function LookbookAdmin() {
                   <div className="aspect-square overflow-hidden bg-gray-100">
                     <img
                       src={item.image_url}
-                      alt="Lookbook"
+                      alt="Aperçu lookbook"
                       className="h-full w-full object-cover transition group-hover:scale-105"
                     />
                   </div>

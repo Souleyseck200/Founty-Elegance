@@ -23,6 +23,7 @@ export const Route = createFileRoute("/")({
         property: "og:description",
         content: "L'élégance sénégalaise, sur-mesure ou prêt-à-porter.",
       },
+      { property: "og:url", content: "https://fountyelegance.com" },
     ],
   }),
   component: Home,
@@ -187,8 +188,7 @@ function Home() {
           {/* Photo de fond */}
           <img
             src={ctaImg}
-            alt=""
-            aria-hidden="true"
+            alt="Artisan à l'œuvre dans l'atelier Founty Élégance"
             className="absolute inset-0 h-full w-full object-cover"
           />
           {/* Overlay couleur heritage */}

@@ -43,6 +43,7 @@ export const Route = createRootRoute({
         property: "og:description",
         content: "L'élégance sénégalaise, sur-mesure ou prêt-à-porter.",
       },
+      { property: "og:url", content: "https://fountyelegance.com" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],

@@ -12,6 +12,7 @@ export const Route = createFileRoute("/about")({
           "Fondée en 2019, Founty est une maison de couture sénégalaise innovante, dédiée à la création de vêtements alliant traditions africaines et influences européennes.",
       },
       { property: "og:title", content: "À propos — Founty Élégance" },
+      { property: "og:url", content: "https://fountyelegance.com/about" },
       { property: "og:image", content: "/og-about.jpg" },
     ],
   }),
